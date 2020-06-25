@@ -1,5 +1,6 @@
 package me.hsgamer.bettergui.realcolor;
 
+import java.util.concurrent.ThreadLocalRandom;
 import me.hsgamer.bettergui.lib.xseries.XMaterial;
 import me.hsgamer.bettergui.manager.VariableManager;
 import me.hsgamer.bettergui.object.GlobalVariable;
@@ -30,13 +31,19 @@ public final class Main extends Addon {
         return null;
       }
 
-      StringBuilder builder = new StringBuilder(ChatColor.COLOR_CHAR + "x");
-      for (char c : s.toCharArray()) {
-        builder.append(ChatColor.COLOR_CHAR).append(c);
-      }
-      return builder.toString();
+      return convertHexToColor(s);
     };
     VariableManager.register("hcolor_", hexColorVariable);
     VariableManager.register("#", hexColorVariable);
+    VariableManager.register("hrainbow", (offlinePlayer, s) -> convertHexToColor(
+        String.format("%06x", ThreadLocalRandom.current().nextInt(0xFFFFFF + 1))));
+  }
+
+  private String convertHexToColor(String hex) {
+    StringBuilder builder = new StringBuilder(ChatColor.COLOR_CHAR + "x");
+    for (char c : hex.toCharArray()) {
+      builder.append(ChatColor.COLOR_CHAR).append(c);
+    }
+    return builder.toString();
   }
 }
